@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plnění kanystrů</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Plnění kanystrů</h1>
+            <nav>
+                <a href="fill.html" class="active">Plnit kanystry</a>
+                <a href="list.html">Naplněné kanystry</a>
+            </nav>
+        </header>
+
+        <main>
+            <div id="reader"></div>
+            
+            <div class="scanned-jugs">
+                <h2>Naskenované kanystry</h2>
+                <ul id="scanned-list"></ul>
+                
+                <div class="actions">
+                    <button id="clear-btn">Vymazat seznam</button>
+                    <button id="submit-btn">Označit jako naplněné</button>
+                </div>
+            </div>
+            
+            <div id="message"></div>
+        </main>
+    </div>
+    
+    <script src="js/fill.js"></script>
+</body>
+</html>
