@@ -3,12 +3,16 @@ from flask_cors import CORS
 import csv
 import os
 import datetime
-import ssl
 
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
 CORS(app)  # Enable CORS for all routes
 
-CSV_FILE = 'data.csv'
+import sys
+
+if len(sys.argv) > 1:
+    CSV_FILE = sys.argv[1]
+else:
+    raise ValueError("Please provide the path to the CSV file as a command line argument.")
 
 # Initialize the CSV file if it doesn't exist
 if not os.path.exists(CSV_FILE):
@@ -117,49 +121,16 @@ def empty_jug():
 def serve_frontend(path):
     return send_from_directory(app.static_folder, path)
 
-def generate_self_signed_cert():
-    # Check if certificate already exists
-    if os.path.exists('server.cert') and os.path.exists('server.key'):
-        return
-
-    # Generate self-signed certificate
-    try:
-        from OpenSSL import crypto
-        
-        key = crypto.PKey()
-        key.generate_key(crypto.TYPE_RSA, 2048)
-
-        cert = crypto.X509()
-        cert.get_subject().CN = "localhost"
-        cert.set_serial_number(1000)
-        cert.gmtime_adj_notBefore(0)
-        cert.gmtime_adj_notAfter(365*24*60*60)  # Valid for a year
-        cert.set_issuer(cert.get_subject())
-        cert.set_pubkey(key)
-        cert.sign(key, 'sha256')
-
-        # Write certificate and key to files
-        with open('server.key', 'wb') as keyfile:
-            keyfile.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
-
-        with open('server.cert', 'wb') as certfile:
-            certfile.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
-        
-        print("Certificate and key files created!")
-    except Exception as e:
-        print(f"Failed to generate certificate: {e}")
-        print("Please install PyOpenSSL: pip install pyopenssl")
-        exit(1)
-
+# In the "__main__" block:
 if __name__ == '__main__':
-    generate_self_signed_cert()
-    
-    # Create SSL context
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    context.load_cert_chain(certfile='server.cert', keyfile='server.key')
+    # Create SSL context using existing certificate files
+    context = (
+        os.path.join(os.getcwd(), 'server.cert'),
+        os.path.join(os.getcwd(), 'server.key')
+    )
     
     print("Starting server on https://0.0.0.0:5000")
-    print("Access from your phone using https://YOUR_COMPUTER_IP:5000")
+    print("Access from your phone using https://YOUR_PHONE_IP:5000")
     
-    # Run the app with SSL context
+    # Run with SSL context
     app.run(host='0.0.0.0', port=5000, ssl_context=context, debug=True)
