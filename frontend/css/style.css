@@ -145,3 +145,25 @@ table th {
 table tr:hover {
     background-color: #f5f5f5;
 }
+
+/* Add styles for the CSV download button */
+#download-csv-btn, #refresh-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: medium;
+    height: 2.5rem;
+}
+
+#download-csv-btn {
+    background-color: #28a745; 
+}
+
+#download-csv-btn:hover {
+    background-color: #218838;  /* Darker green on hover */
+}

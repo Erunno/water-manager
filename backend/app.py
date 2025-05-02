@@ -3,19 +3,25 @@ from flask_cors import CORS
 import csv
 import os
 import datetime
+import sys
+from threading import Thread
 
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
 CORS(app)  # Enable CORS for all routes
 
-import sys
-
+# Determine CSV file path from command line argument or environment variable
 if len(sys.argv) > 1:
     CSV_FILE = sys.argv[1]
+elif os.environ.get('CSV_FILE'):
+    CSV_FILE = os.environ.get('CSV_FILE')
 else:
-    raise ValueError("Please provide the path to the CSV file as a command line argument.")
+    CSV_FILE = 'data.csv'  # Default fallback
+
+print(f"Using database file: {CSV_FILE}")
 
 # Initialize the CSV file if it doesn't exist
 if not os.path.exists(CSV_FILE):
+    os.makedirs(os.path.dirname(CSV_FILE), exist_ok=True)
     with open(CSV_FILE, 'w', newline='', encoding='utf-8-sig') as file:
         writer = csv.writer(file)
         writer.writerow(['JugName', 'State', 'DateTime'])
@@ -115,22 +121,88 @@ def empty_jug():
     write_csv(data)
     return jsonify({'message': f'Emptied jug {jug_name}', 'status': 'success'})
 
+# API route to get raw CSV data
+@app.route('/api/data-csv', methods=['GET'])
+def get_csv_data():
+    try:
+        with open(CSV_FILE, 'r', newline='', encoding='utf-8-sig') as file:
+            csv_content = file.read()
+        
+        response = app.response_class(
+            response=csv_content,
+            status=200,
+            mimetype='text/csv'
+        )
+        response.headers["Content-Disposition"] = "attachment; filename=water-jugs.csv"
+        return response
+    except Exception as e:
+        return jsonify({'error': f'Error reading CSV file: {str(e)}'}), 500
+
 # Serve frontend files
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
 def serve_frontend(path):
     return send_from_directory(app.static_folder, path)
 
+# Add a basic health check endpoint that doesn't require HTTPS
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({'status': 'ok'})
+
 # In the "__main__" block:
 if __name__ == '__main__':
-    # Create SSL context using existing certificate files
-    context = (
-        os.path.join(os.getcwd(), 'server.cert'),
-        os.path.join(os.getcwd(), 'server.key')
-    )
+    # Function to run the HTTP server
+    def run_http_server():
+        http_app = Flask(__name__, static_folder='../frontend', static_url_path='')
+        CORS(http_app)
+        
+        # Define the same routes for the HTTP app
+        @http_app.route('/api/jugs', methods=['GET'])
+        def http_get_jugs():
+            return get_jugs()
+        
+        @http_app.route('/api/jugs/fill', methods=['POST'])
+        def http_fill_jugs():
+            return fill_jugs()
+        
+        @http_app.route('/api/jugs/empty', methods=['POST'])
+        def http_empty_jug():
+            return empty_jug()
+            
+        @http_app.route('/api/data-csv', methods=['GET'])
+        def http_get_csv_data():
+            return get_csv_data()
+            
+        @http_app.route('/health', methods=['GET'])
+        def http_health_check():
+            return health_check()
+        
+        # Serve frontend files
+        @http_app.route('/', defaults={'path': 'index.html'})
+        @http_app.route('/<path:path>')
+        def http_serve_frontend(path):
+            return send_from_directory(http_app.static_folder, path)
+            
+        print("Starting server with HTTP on http://0.0.0.0:80")
+        http_app.run(host='0.0.0.0', port=80, debug=False)
     
-    print("Starting server on https://0.0.0.0:5000")
-    print("Access from your phone using https://YOUR_PHONE_IP:5000")
+    # Check if certificates exist for HTTPS
+    cert_path = os.path.join(os.getcwd(), 'server.cert')
+    key_path = os.path.join(os.getcwd(), 'server.key')
     
-    # Run with SSL context
-    app.run(host='0.0.0.0', port=5000, ssl_context=context, debug=True)
+    # Start HTTP server in a separate thread
+    http_thread = Thread(target=run_http_server)
+    http_thread.daemon = True
+    http_thread.start()
+    
+    # Start the HTTPS server in the main thread
+    if os.path.exists(cert_path) and os.path.exists(key_path):
+        context = (cert_path, key_path)
+        print("Starting server with HTTPS on https://0.0.0.0:5000")
+        app.run(host='0.0.0.0', port=5000, ssl_context=context, debug=True, use_reloader=False)
+    else:
+        print("HTTPS certificates not found. Only HTTP server is available.")
+        # Keep the main thread alive
+        import time
+        while True:
+            time.sleep(1)

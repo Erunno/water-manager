@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  water-manager:
+    build: .
+    ports:
+      - "5000:5000"  # HTTPS port
+      - "80:80"      # HTTP port
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    container_name: water-manager
