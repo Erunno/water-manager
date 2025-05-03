@@ -78,7 +78,7 @@ def get_jugs():
         # Filter jugs that are currently filled
         filled_jugs = [jug for jug in jug_states.values() if jug['State'] == 'Filled']
         # Sort by datetime (oldest first)
-        filled_jugs.sort(key=lambda x: x['DateTime'])
+        # filled_jugs.sort(key=lambda x: x['DateTime'])
         return jsonify(filled_jugs)
     
     return jsonify(data)
