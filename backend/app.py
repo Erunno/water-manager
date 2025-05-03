@@ -72,13 +72,22 @@ def get_jugs():
     if request.args.get('state') == 'filled':
         # Get only the most recent state for each jug
         jug_states = {}
-        for entry in sorted(data, key=lambda x: x['DateTime']):
+        
+        # Parse datetime using standard library function and sort
+        def parse_datetime_safe(dt_str):
+            try:
+                return datetime.datetime.strptime(dt_str, '%H:%M:%S %d.%m.%Y')
+            except (ValueError, TypeError):
+                return datetime.datetime.min
+                
+        # Sort by proper datetime parsing
+        for entry in sorted(data, key=lambda x: parse_datetime_safe(x['DateTime'])):
             jug_states[entry['JugName']] = entry
             
         # Filter jugs that are currently filled
         filled_jugs = [jug for jug in jug_states.values() if jug['State'] == 'Filled']
         # Sort by datetime (oldest first)
-        # filled_jugs.sort(key=lambda x: x['DateTime'])
+        filled_jugs.sort(key=lambda x: parse_datetime_safe(x['DateTime']))
         return jsonify(filled_jugs)
     
     return jsonify(data)
