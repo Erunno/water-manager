@@ -160,13 +160,22 @@ def draw_cutting_guidelines(c, cols, rows, margin, col_width, row_height):
 
 if __name__ == "__main__":
     # Example list of names
+    # names = [
+    #     "Bětka", "Anča", "Eli", "Tereza", "Baru", "Klára", "Maru", "Kika", "Adéla", 
+    #     "Kačka", "Jana", "Ála", "Verča", "Zuzka", "Luci", "Naty", "Mája", "Vendy",
+    #     "Hanka", "Kája", "Sofi", "Eva", "Martina", "Dája", "Lída", "Marky",
+    #     "Niky", "Andy", "Štěpa", "Bea", "Róza", "Dorka", "Justy", "Áma", 
+    #     "Joha", "Lenka", "Božka", "Móňa", "Sába", "Radka", "Peťa", "Ivča", 
+    #     "Reny", "Blanka", "Céca", "Cilda", "Dáša", "Fany"
+    # ]
     names = [
-        "Bětka", "Anča", "Eli", "Tereza", "Baru", "Klára", "Maru", "Kika", "Adéla", 
-        "Kačka", "Jana", "Ála", "Verča", "Zuzka", "Luci", "Naty", "Mája", "Vendy",
-        "Hanka", "Kája", "Sofi", "Eva", "Martina", "Dája", "Lída", "Marky",
-        "Niky", "Andy", "Štěpa", "Bea", "Róza", "Dorka", "Justy", "Áma", 
-        "Joha", "Lenka", "Božka", "Móňa", "Sába", "Radka", "Peťa", "Ivča", 
-        "Reny", "Blanka", "Céca", "Cilda", "Dáša", "Fany"
+        "Marky", "Niky", "Andy", "Štěpa", "Bea", "Léňa",
+        "Téra", "Kiki", "Áďa",
+        "Kač", "Zuza", "Veny",
+        "Hany", "Eví", "Dáda", "Nika",
+        "Róz", "Boža", 
+        "Moňa", "Cina", "Dyna", 
+        "Milu", "Gaga", "Didi"
     ]
     
     # To use the script with your own list, replace the names list above
