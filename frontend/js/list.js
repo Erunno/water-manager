@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         noJugsFound: 'Žádné naplněné kanystry nenalezeny',
         loaded: 'Načtená data:',
         jugs: 'kanystry',
-        markEmpty: 'Označit jako prázdný',
+        markEmpty: 'Vyzvednout',
         markedEmpty: 'Kanystr označen jako prázdný',
         error: 'Chyba',
         networkError: 'Chyba sítě:'

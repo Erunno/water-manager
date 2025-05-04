@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upravit databázi</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Upravit databázi kanystrů</h1>
+            <nav>
+                <a href="fill.html">Plnit kanystry</a>
+                <a href="list.html">Naplněné kanystry</a>
+                <a href="edit-db.html" class="active danger">Upravit databázi</a>
+            </nav>
+        </header>
+        
+        <main>
+            <div class="warning-box">
+                <h2>⚠️ Varování</h2>
+                <p>Editace databáze přímo může způsobit ztrátu dat nebo poškození.</p>
+            </div>
+            
+            <div class="config-controls">
+                <label for="lines-count">Počet řádků k zobrazení:</label>
+                <input type="number" id="lines-count" min="5" max="100" value="20">
+                <button id="load-btn">Načíst</button>
+            </div>
+            
+            <div class="editor-container">
+                <textarea id="csv-editor" rows="15" placeholder="Načítání dat..."></textarea>
+            </div>
+            
+            <div class="actions">
+                <button id="save-btn" class="danger-btn">Uložit změny</button>
+                <button id="cancel-btn">Zrušit</button>
+            </div>
+            
+            <div id="message"></div>
+        </main>
+    </div>
+    
+    <script src="js/edit-db.js"></script>
+</body>
+</html>
