@@ -46,6 +46,15 @@ nav a.active {
     border-radius: 5px;
 }
 
+nav a.danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+nav a.danger:hover {
+    background-color: #c82333;
+}
+
 button {
     padding: 8px 16px;
     background-color: #0066cc;
@@ -58,6 +67,14 @@ button {
 
 button:hover {
     background-color: #0055b3;
+}
+
+.danger-btn {
+    background-color: #dc3545;
+}
+
+.danger-btn:hover {
+    background-color: #c82333;
 }
 
 #reader {
@@ -147,7 +164,7 @@ table tr:hover {
 }
 
 /* Add styles for the CSV download button */
-#download-csv-btn, #refresh-btn {
+#download-csv-btn, #refresh-btn, #edit-db-btn {
     display: inline-block;
     padding: 8px 16px;
     color: white;
@@ -166,4 +183,59 @@ table tr:hover {
 
 #download-csv-btn:hover {
     background-color: #218838;  /* Darker green on hover */
+}
+
+#edit-db-btn {
+    background-color: #dc3545;  /* Red color for danger */
+}
+
+#edit-db-btn:hover {
+    background-color: #c82333;  /* Darker red on hover */
+}
+
+/* Styles for database editor */
+.warning-box {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ffeeba;
+}
+
+.warning-box h2 {
+    margin-bottom: 10px;
+    color: #856404;
+}
+
+.editor-container {
+    margin: 20px 0;
+}
+
+#csv-editor {
+    width: 100%;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.config-controls {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+}
+
+.config-controls label {
+    margin-right: 10px;
+}
+
+.config-controls input {
+    width: 80px;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
