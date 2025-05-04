@@ -15,9 +15,9 @@ QR_CODE_SIZE = 35 * mm  # Width and height of the QR code
 LABEL_HEIGHT = 10 * mm  # Height of the label area
 ITEM_HEIGHT = QR_CODE_SIZE + LABEL_HEIGHT  # Total height of each QR code + label
 ITEM_WIDTH = QR_CODE_SIZE  # Width of each QR code + label
-MARGIN = 10 * mm  # Margin around the edges of the page
-SPACING = 5 * mm  # Spacing between QR codes
-FONT_SIZE = 15  # Font size for labels
+MARGIN = 15 * mm  # Margin around the edges of the page
+SPACING = 0 * mm  # Spacing between QR codes
+FONT_SIZE = 30  # Font size for labels
 
 # Register a font that supports Czech characters
 try:
@@ -26,8 +26,8 @@ try:
     
     # Windows common fonts that support Czech characters
     possible_fonts = [
-        ('Arial', 'c:/windows/fonts/arial.ttf'),
         ('Calibri', 'c:/windows/fonts/calibri.ttf'),
+        ('Arial', 'c:/windows/fonts/arial.ttf'),
         ('Segoe UI', 'c:/windows/fonts/segoeui.ttf'),
         ('Times New Roman', 'c:/windows/fonts/times.ttf'),
     ]
@@ -104,8 +104,8 @@ def generate_qr_codes_pdf(names, output_filename="qr_codes.pdf"):
             temp_files.append(temp_file)
             
             # Calculate cell position
-            cell_x = MARGIN + col * (ITEM_WIDTH + SPACING) + 3 * mm # manual offset
-            cell_y = height - MARGIN - ITEM_HEIGHT - row * (ITEM_HEIGHT + SPACING) - 3 * mm # manual offset
+            cell_x = MARGIN + col * (ITEM_WIDTH + SPACING) + 0 * mm # manual offset
+            cell_y = height - MARGIN - ITEM_HEIGHT - row * (ITEM_HEIGHT + SPACING) - 0 * mm # manual offset
             
             # Center QR code within the cell
             x = cell_x + (ITEM_WIDTH - QR_CODE_SIZE) / 2
@@ -149,12 +149,12 @@ def draw_cutting_guidelines(c, cols, rows, margin, col_width, row_height):
     page_width, page_height = A4
     
     # Draw vertical lines (cols - 1)
-    for i in range(1, cols):
+    for i in range(0, cols + 1):
         x = margin + i * col_width
         c.line(x, margin, x, page_height - margin)
     
     # Draw horizontal lines (rows - 1)
-    for i in range(1, rows):
+    for i in range(0, rows + 1):
         y = page_height - margin - i * row_height
         c.line(margin, y, page_width - margin, y)
 
@@ -165,8 +165,8 @@ if __name__ == "__main__":
         "Kačka", "Jana", "Ála", "Verča", "Zuzka", "Luci", "Naty", "Mája", "Vendy",
         "Hanka", "Kája", "Sofi", "Eva", "Martina", "Dája", "Lída", "Marky",
         "Niky", "Andy", "Štěpa", "Bea", "Róza", "Dorka", "Justy", "Áma", 
-        "Joha", "Lenka", "Božka", "Monča", "Sába", "Radka", "Peťa", "Ivča", 
-        "Reny", "Blanka"
+        "Joha", "Lenka", "Božka", "Móňa", "Sába", "Radka", "Peťa", "Ivča", 
+        "Reny", "Blanka", "Céca", "Cilda", "Dáša", "Fany"
     ]
     
     # To use the script with your own list, replace the names list above
